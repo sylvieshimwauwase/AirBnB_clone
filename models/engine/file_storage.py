@@ -2,6 +2,7 @@
 """This module contains a File Storage class for the AirBnB"""
 import json
 import os
+from models.base_model import BaseModel
 
 
 class FileStorage():
@@ -11,6 +12,9 @@ class FileStorage():
     """
     __file_path = "file.json"
     __objects = {}
+    __modelClasses = {
+        "BaseModel": BaseModel
+    }
 
     def all(self):
         """This method returns the dictionary objects"""
@@ -21,16 +25,19 @@ class FileStorage():
         This method setts in __objects the give
         obj with key <obj class name>.id
         """
-        for key, value in obj.items():
-            self.__class__.__objects[key] = value
+        self.__objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
 
     def save(self):
         """This method serializes __objects to a JSON file"""
-        with open(self.__file_path, 'w') as f:
-            f.write(json.dumps(self.__objects))
+        with open(self.__file_path, "w") as f:
+            json.dump({k: v.to_dict() for k, v in self.__objects.items()}, f)
 
     def reload(self):
         """This method deserializes the JSON file to __objects"""
         if os.path.exists(self.__file_path):
             with open(self.__file_path) as f:
-                json.loads(f.read())
+                new_objects = json.load(f)
+            self.__objects = {
+                key: self.__modelClasses[val.get("__class__")](**val)
+                for key, val in new_objects.items()
+            }
