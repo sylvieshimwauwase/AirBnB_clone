@@ -16,6 +16,7 @@ class FileStorage():
         "BaseModel": BaseModel
     }
 
+
     def all(self):
         """This method returns the dictionary objects"""
         return self.__objects
@@ -34,10 +35,13 @@ class FileStorage():
 
     def reload(self):
         """This method deserializes the JSON file to __objects"""
-        if os.path.exists(self.__file_path):
+        try:
             with open(self.__file_path) as f:
                 new_objects = json.load(f)
             self.__objects = {
                 key: self.__modelClasses[val.get("__class__")](**val)
                 for key, val in new_objects.items()
             }
+
+        except Exception:
+            return
