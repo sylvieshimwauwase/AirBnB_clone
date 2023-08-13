@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """This a Python made console command interpreter"""
 import cmd
-from models.engine.file_storage import FileStorage
+from models import storage
 from models.base_model import BaseModel
 
 
@@ -51,16 +51,131 @@ class HBNBCommand(cmd.Cmd):
 
         command_list = line.split()
         command = command_list[0]
-        command_id = command_list[1]
+        command_id = ""
+        if len(command_list) > 1:
+            command_id = command_list[1]
         if command not in self.my_classes.keys():
             print("** class doesn't exist **")
             return False
-        
-        if command_id == None:
+
+        if command_id == "":
             print("** instance id missing **")
             return False
-        
-        print(FileStorage.all())
+
+        class_key = f"{command}.{command_id}"
+        storage.reload()
+        all_objs = storage.all()
+        if class_key in all_objs:
+            print(all_objs[class_key])
+        else:
+            print("** no instance found **")
+
+    def do_destroy(self, line):
+        """
+        This method deletes an instance based on the class name
+        and id (save the change into the JSON file)
+        """
+        if line == "":
+            print("** class name missing **")
+            return False
+
+        command_list = line.split()
+        command = command_list[0]
+        command_id = ""
+        if len(command_list) > 1:
+            command_id = command_list[1]
+        if command not in self.my_classes.keys():
+            print("** class doesn't exist **")
+            return False
+
+        if command_id == "":
+            print("** instance id missing **")
+            return False
+
+        class_key = f"{command}.{command_id}"
+        storage.reload()
+        all_objs = storage.all()
+        if class_key in all_objs:
+            del (all_objs[class_key])
+            storage.save()
+        else:
+            print("** no instance found **")
+
+    def do_all(self, line):
+        """
+        This method prints all string representation of
+        all instances based or not on the class name
+        """
+        class_name = f"{line}"
+        storage.reload()
+        all_objs = storage.all()
+        if class_name:
+            my_classes = [
+                str(all_objs[k]) for k in all_objs.keys() if k.split(".")
+                [0] == class_name
+            ]
+            if not my_classes:
+                print("** class doesn't exist **")
+                return
+        else:
+            my_classes = [str(all_objs[k]) for k in all_objs.keys()]
+
+        print(my_classes)
+
+    def do_update(self, line):
+        """
+        This method updates an instance based on the class name
+        and id by adding or updating attribute (save the change
+        into the JSON file).
+        Ex: $ update BaseModel 1234-1234-1234 email "aibnb@mail.com"
+
+        Keyword arguments:
+        line -- the given command line
+        Return: void
+        """
+        args_list = line.split()
+        if len(args_list) < 1:
+            print("** class name missing **")
+            return
+        elif args_list[0] not in self.my_classes:
+            print("** class doesn't exist **")
+            return
+        elif len(args_list) == 1:
+            print("** instance id missing **")
+            return
+        elif len(args_list) == 2:
+            print("** attribute name missing **")
+            return
+        elif len(args_list) == 3:
+            print("** value missing **")
+            return
+        elif len(args_list) > 4:
+            args_list = args_list[:4]
+
+        if args_list[0] not in self.my_classes:
+            print("** class doesn't exist **")
+            return
+
+        class_key = f"{args_list[0]}.{args_list[1]}"
+        class_attribute = args_list[2]
+        class_value = args_list[3][1:-1]
+
+        storage.reload()
+        all_objs = storage.all()
+        if class_key in all_objs:
+            if class_attribute in dir(all_objs[class_key]):
+                index = dir(all_objs[class_key]).index(class_attribute)
+                attribute_type = type(dir(all_objs[class_key])[index])
+                all_objs[class_key].__setattr__(
+                    class_attribute, attribute_type(class_value))
+            else:
+                all_objs[class_key].__setattr__(
+                    class_attribute, class_value)
+            all_objs[class_key].save()
+            return
+        else:
+            print("** no instance found **")
+            return
 
 
 if __name__ == "__main__":
