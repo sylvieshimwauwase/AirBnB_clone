@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """This module contains a File Storage class for the AirBnB"""
 import json
-import os
 from models.base_model import BaseModel
 from models.user import User
 
