@@ -78,5 +78,5 @@ class TestPlace(unittest.TestCase):
         self.assertTrue('amenity_ids' in place_str)
 
 
-if __name__ = '__main__':
+if __name__ == '__main__':
     unittest.main()

@@ -48,5 +48,5 @@ class TestState(unittest.TestCase):
         self.assertTrue('name' in state_str)
 
 
-if __name__ = '__main__':
-    unittest.main()t
+if __name__ == '__main__':
+    unittest.main()
