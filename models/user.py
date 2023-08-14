@@ -1,16 +1,18 @@
 #!/usr/bin/python3
-"""this is a user class that inherits from BaseModel"""
-
+"""This is an AirBnB Python package having the User class defined"""
 from models.base_model import BaseModel
 
 
 class User(BaseModel):
-    """Representing user class"""
+    """
+    A user class that inherits from BaseModel
 
-    def __init__(self, *args, **kwargs):
-        """initializing user attributes"""
-        super().__init__(*args, **kwargs)
-        self.email = ""
-        self.password = ""
-        self.first_name = ""
-        self.last_name = ""
+    Keyword arguments:
+    argument -- void
+    Return: void
+    """
+
+    email = ""
+    password = ""
+    first_name = ""
+    last_name = ""

@@ -1,15 +1,28 @@
 #!/usr/bin/python3
 """This a Python made console command interpreter"""
 import cmd
+import re
 from models import storage
 from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 
 
 class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
 
     my_classes = {
-        "BaseModel": BaseModel
+        "BaseModel": BaseModel,
+        "User": User,
+        "State": State,
+        "City": City,
+        "Amenity": Amenity,
+        "Place": Place,
+        "Review": Review
     }
 
     def do_EOF(self, line=None):
@@ -36,7 +49,8 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return False
 
-        new_obj = self.my_classes[command]()
+        new_obj = type(self).my_classes[command]()
+        storage.new(new_obj)
         new_obj.save()
         print(new_obj.id)
 
@@ -122,6 +136,13 @@ class HBNBCommand(cmd.Cmd):
 
         print(my_classes)
 
+    def isfloat(self, value):
+        try:
+            float(value)
+            return True
+        except ValueError:
+            return False
+
     def do_update(self, line):
         """
         This method updates an instance based on the class name
@@ -133,7 +154,7 @@ class HBNBCommand(cmd.Cmd):
         line -- the given command line
         Return: void
         """
-        args_list = line.split()
+        args_list = re.findall(r'"[^"]*"|\S+', line)
         if len(args_list) < 1:
             print("** class name missing **")
             return
@@ -163,14 +184,12 @@ class HBNBCommand(cmd.Cmd):
         storage.reload()
         all_objs = storage.all()
         if class_key in all_objs:
-            if class_attribute in dir(all_objs[class_key]):
-                index = dir(all_objs[class_key]).index(class_attribute)
-                attribute_type = type(dir(all_objs[class_key])[index])
-                all_objs[class_key].__setattr__(
-                    class_attribute, attribute_type(class_value))
-            else:
-                all_objs[class_key].__setattr__(
-                    class_attribute, class_value)
+            if class_value.isdigit():
+                class_value = int(class_value)
+            elif (self.isfloat(class_value)):
+                class_value = float(class_value)
+            all_objs[class_key].__setattr__(
+                class_attribute, class_value)
             all_objs[class_key].save()
             return
         else:
