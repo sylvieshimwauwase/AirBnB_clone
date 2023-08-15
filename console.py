@@ -115,7 +115,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** no instance found **")
 
-    def do_all(self, line):
+    def do_all(self, line, count=None):
         """
         This method prints all string representation of
         all instances based or not on the class name
@@ -133,7 +133,8 @@ class HBNBCommand(cmd.Cmd):
                 return
         else:
             my_classes = [str(all_objs[k]) for k in all_objs.keys()]
-
+        if count:
+            return len(my_classes)
         print(my_classes)
 
     def isfloat(self, value):
@@ -195,6 +196,37 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** no instance found **")
             return
+
+    def default(self, line):
+        """
+        This method handles the dot command notations.
+        Formats the given command into the appropriate format
+        and call the appropriate class method
+        
+        Keyword arguments:
+        lines -- the given command
+        Return: void
+        """
+        
+        args = line.split(".")
+        if "all" in args[1]:
+            self.do_all(args[0])
+        elif "count" in args[1]:
+            print(self.do_all(args[0], args[1]))
+        elif "show" in args[1]:
+            try:
+                class_id = re.findall(r'\"\S+\"', args[1])[0]
+                class_id = class_id.strip("'").strip('"')
+                self.do_show(f"{args[0]} {class_id}")
+            except Exception:
+                return
+        elif "destroy" in args[1]:
+            try:
+                class_id = re.findall(r'\"\S+\"', args[1])[0]
+                class_id = class_id.strip("'").strip('"')
+                self.do_destroy(f"{args[0]} {class_id}")
+            except Exception:
+                return
 
 
 if __name__ == "__main__":
