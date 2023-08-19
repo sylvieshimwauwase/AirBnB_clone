@@ -1,13 +1,17 @@
 #!/usr/bin/python3
-"""defining review class inherited from basemodel"""
+"""This is an AirBnB Python package having the Review class defined"""
+from models.base_model import BaseModel
 
 
 class Review(BaseModel):
-    """representing review class"""
+    """
+    A review class that inherits from BaseModel
 
-    def __init__(self, *args, **kwargs):
-        """defining review attributes"""
-        super().__init__(*args, **kwargs)
-        self.place_id = ""
-        self.user_id = ""
-        self.text = ""
+    Keyword arguments:
+    argument -- void
+    Return: void
+    """
+
+    place_id = ""
+    user_id = ""
+    text = ""

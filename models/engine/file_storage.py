@@ -1,9 +1,13 @@
 #!/usr/bin/python3
 """This module contains a File Storage class for the AirBnB"""
 import json
-import os
 from models.base_model import BaseModel
 from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 
 
 class FileStorage():
@@ -15,7 +19,12 @@ class FileStorage():
     __objects = {}
     __modelClasses = {
         "BaseModel": BaseModel,
-        "User": User
+        "User": User,
+        "State": State,
+        "City": City,
+        "Amenity": Amenity,
+        "Place": Place,
+        "Review": Review
     }
 
     def all(self):
@@ -36,10 +45,13 @@ class FileStorage():
 
     def reload(self):
         """This method deserializes the JSON file to __objects"""
-        if os.path.exists(self.__file_path):
+        try:
             with open(self.__file_path) as f:
                 new_objects = json.load(f)
             self.__objects = {
                 key: self.__modelClasses[val.get("__class__")](**val)
                 for key, val in new_objects.items()
             }
+
+        except Exception:
+            return

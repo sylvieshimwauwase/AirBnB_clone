@@ -1,14 +1,16 @@
 #!/usr/bin/python3
-"""defining city class inheriting from base model"""
-
+"""This is an AirBnB Python package having the City class defined"""
 from models.base_model import BaseModel
 
 
 class City(BaseModel):
-    """representing city class"""
+    """
+    A city class that inherits from BaseModel
 
-    def __init__(self, *args, **kwargs):
-        """defining city attributes"""
-        super().__init__(*args, **kwargs)
-        self.state_id = ""
-        self.name = ""
+    Keyword arguments:
+    argument -- void
+    Return: void
+    """
+
+    state_id = ""
+    name = ""

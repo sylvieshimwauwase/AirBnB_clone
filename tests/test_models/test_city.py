@@ -51,5 +51,5 @@ class TestCity(unittest.TestCase):
         self.assertTrue('name' in city_str)
 
 
-if __name__ = '__main__':
+if __name__ == '__main__':
     unittest.main()

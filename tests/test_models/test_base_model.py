@@ -9,22 +9,24 @@ import sys
 class TestBaseModel(unittest.TestCase):
     """class to test BaseModel"""
 
+    def setUp(self):
+        self.base_model = BaseModel(
+            id='123',
+            created_at='2023-08-01T12:00:00',
+            updated_at='2023-08-01T13:00:00'
+        )
+
     def test_init_with_kwargs(self):
         """test initialization with kwargs"""
-        base_model = BaseModel(
-                id='123',
-                created_at='2023-08-01T12:00:00',
-                updated_at='2023-08-01T13:00:00'
-                )
-        self.assertEqual(base_model.id, '123')
+        self.assertEqual(self.base_model.id, '123')
         self.assertEqual(
-                base_mode.created_at.isoformat(),
-                '2023-08-01T12:00:00'
-                )
+            self.base_model.created_at.isoformat(),
+            '2023-08-01T12:00:00'
+        )
         self.assertEqual(
-                base_model.updated_at.isoformat(),
-                '2023-08-01T13:00:00'
-                )
+            self.base_model.updated_at.isoformat(),
+            '2023-08-01T13:00:00'
+        )
 
     def test_str(self):
         """test str"""
@@ -40,12 +42,15 @@ class TestBaseModel(unittest.TestCase):
     def test_to_dict(self):
         """test conversion of instance attributes to a dictionary"""
         dict = {
-                'id': self.base_model.id,
-                'created_at': self.base_model.created_at.isoformat(),
-                'updated_at': slef.base_model.updated_at.isoformat(),
-                '__class__': 'BaseModel'
-                }
-        self.assertEqual(base_model.to_dict(), dict)
+            'id': self.base_model.id,
+            'created_at': self.base_model.created_at.isoformat(),
+            'updated_at': self.base_model.updated_at.isoformat(),
+            '__class__': 'BaseModel'
+        }
+        self.assertEqual(self.base_model.to_dict(), dict)
+
+    def tearDown(self):
+        pass
 
 
 if __name__ == '__main__':

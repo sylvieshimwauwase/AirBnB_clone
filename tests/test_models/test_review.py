@@ -54,5 +54,5 @@ class TestReview(unittest.TestCase):
         self.assertTrue('text' in review_str)
 
 
-if __name__ = '__main__':
+if __name__ == '__main__':
     unittest.main()

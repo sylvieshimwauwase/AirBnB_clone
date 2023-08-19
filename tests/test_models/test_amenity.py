@@ -48,5 +48,5 @@ class TestAmenity(unittest.TestCase):
         self.assertTrue('name' in amenity_str)
 
 
-if __name__ = '__main__':
+if __name__ == '__main__':
     unittest.main()

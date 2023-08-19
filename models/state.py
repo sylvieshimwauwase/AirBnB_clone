@@ -1,13 +1,15 @@
 #!/usr/bin/python3
-"""inheriting state class from base model"""
-
+"""This is an AirBnB Python package having the State class defined"""
 from models.base_model import BaseModel
 
 
 class State(BaseModel):
-    """representation of state class"""
+    """
+    A state class that inherits from BaseModel
 
-    def __init__(self, *args, **kwargs):
-        """defining state attributes"""
-        super().__init__(*args, **kwargs)
-        self.name = ""
+    Keyword arguments:
+    argument -- void
+    Return: void
+    """
+
+    name = ""
